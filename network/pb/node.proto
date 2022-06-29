@@ -1,0 +1,62 @@
+syntax = "proto3";
+option go_package = "./;pb";
+
+enum Compiler {
+    PROTO   = 0;
+    JSON    = 1;
+    JSONPB  = 2;
+}
+
+message NodeInfo {
+	// process ID
+	uint64 Pid = 1;
+	// server version
+	string Ver = 2;
+	// server node uuid
+	string Uuid = 3;
+	// server node name
+	string Name = 4;
+	// main node
+	bool Main = 5;
+	// localhost address
+	string Host = 6;
+	// tcp local listen port
+	uint64 Tport = 7;
+	// udp local listen port
+	uint64 Uport = 8;
+	// http local listen port
+	uint64 Hport = 9;
+	// local api types: send or call, protocal
+    repeated FuncApi Funcs = 10;
+}
+
+message FuncApi {
+	uint32 ID		= 1;
+	string Name		= 2;
+	ApiType Type	= 5;
+    Compiler Kind   = 6;
+}
+
+enum ApiType {
+    Send	= 0;	// 单传入参数
+    Call	= 1;	// 单传入参数，单传出参数解析
+    Multi	= 2;	// 多参数传入，单参数传出解析
+}
+
+message FuncMsg {
+	uint32 FuncID   = 1;
+	string ApiName  = 2;
+	string ServName = 3;
+	string FuncName = 4;
+	ApiType ApiType = 5;
+    Compiler Protocal   = 6;
+}
+
+message UpFuncList {
+	repeated FuncMsg Data = 1;
+}
+
+message MultiBody {
+	uint32 Count = 1;
+	repeated bytes Data = 2;
+}

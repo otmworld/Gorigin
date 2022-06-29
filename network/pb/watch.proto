@@ -1,0 +1,60 @@
+syntax = "proto3";
+option go_package = "./;pb";
+
+import "node.proto";
+
+message SystemStatus  {
+	string Uuid     = 1;
+	uint64 CpuRate  = 2;
+	uint64 MemFree  = 3;
+	uint64 MemUsed  = 4;
+	uint64 ConnNum  = 5;
+}
+
+message SendAllRsp {
+	repeated SendRsp Result = 1;
+	uint32 Count            = 2;
+}
+message SendRsp {
+	string Uuid     = 1;
+	string Network  = 2;
+	bool Success    = 3;
+	string Message  = 4;
+}
+
+message RegisteredRsp {
+	repeated NodeInfo Watch = 1;
+    repeated FuncApi Funcs = 2;
+}
+
+// Query function message
+message GetFuncMsgReq {
+	uint32 FuncID   = 1;
+	string ApiName  = 2;
+}
+message GetFuncMsgRsp {
+	FuncApi Func    = 1;	// request not null
+	repeated FuncApi List = 2; // request was null, query all
+}
+
+
+// Query same node message
+message GetNodeMsgReq {
+	string Uuid = 1;
+	string Name = 2;
+}
+message GetNodeMsgRsp {
+	NodeInfo Data = 1;	// use uuid query
+	repeated NodeInfo List = 2; // use name query
+}
+
+
+// Query function node to connection call
+message GetApiConnReq {
+	uint32 FuncID   = 1; // function id
+	string ApiName	= 2; // server struct name
+}
+message GetApiConnRsp {
+    FuncMsg Func = 1; // function message
+	repeated NodeInfo List = 2; // node list
+}
